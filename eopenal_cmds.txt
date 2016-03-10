@@ -1,0 +1,29 @@
+l(eopenal).
+D = eopenal:alcOpenDevice(). 
+true = eopenal:alcIsExtensionPresent(alc_enumeration_ext).
+[ADS|_] = eopenal:alcGetString(alc_device_specifier).
+C = eopenal:alcCreateContext(D).
+true = eopenal:alcMakeContextCurrent(C).
+ok = eopenal:alListener3f(al_position, 0.0, 0.0, 1.0).
+ok = eopenal:alListener3f(al_velocity, 0.0, 0.0, 0.0).
+ok = eopenal:alListenerfv(al_orientation, {0.0, 0.0, 1.0, 0.0, 1.0, 0.0}).
+[S] = eopenal:alGenSources(1).
+ok = eopenal:alSourcef(S, al_pitch, 1.0).
+ok = eopenal:alSourcef(S, al_gain, 1.0).
+ok = eopenal:alSource3f(S, al_position, 0.0, 0.0, 0.0).
+ok = eopenal:alSource3f(S, al_velocity, 0.0, 0.0, 0.0).
+ok = eopenal:alSourcei(S, al_looping, 0).
+[B1, B2] = eopenal:alGenBuffers(2).
+Data = element(2, file:read_file("/home/eric/music.raw")).
+ok = eopenal:alBufferData(B1, al_format_mono16, Data, 8000).
+ok = eopenal:alBufferData(B2, al_format_mono16, Data, 8000).
+ok = eopenal:alSourceQueueBuffers(S, [B1, B1]).
+2 = eopenal:alGetSourcei(S, al_buffers_queued).
+ok = eopenal:alSourcePlay(S).
+ok = timer:sleep(500).
+ok = eopenal:alSourceStop(S).
+ok = eopenal:alSourceUnqueueBuffers(S, [B1]).
+1 = eopenal:alGetSourcei(S, al_buffers_queued).
+ok = eopenal:alSourcePlay(S).
+
+
